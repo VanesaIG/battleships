@@ -1,0 +1,57 @@
+#table{
+    position: absolute;
+    left: 10vw;
+    cursor: pointer;
+    border-collapse: collapse;
+    border: 1px solid black;
+    margin: 1%;
+}
+#table, .cell, tr{
+    height: 35px;
+    text-align: center;
+    table-layout: fixed;
+}
+td {
+    min-width: 35px;
+    max-width: 35px;
+}
+.cell {
+    background-color: #5959b4;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+.cell-hit {
+    background-color: grey;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+.cell-miss {
+    background-color: darkblue;
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+#moral-support {
+    position: absolute;
+    left: 550px;
+    top: 100px;
+    margin: 2%;
+}
+#clicks-left {
+    position: absolute;
+    left: 550px;
+    top: 50px;
+    margin: 2%;
+}
+.disabled {
+    pointer-events: none;
+}
+.letters {
+     border-top: 1px solid white;
+     border-left: 1px solid white;
+     border-bottom: 1px solid white; 
+}
+.numbers {
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+    border-right: 1px solid white; 
+}
