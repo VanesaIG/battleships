@@ -46,7 +46,6 @@ class Game {
                 this.placeAShip(this.ships[i], i)
             }
         }
-        console.log(this.coordinates)
     }
     createTable() {
         let clicksLeftDOM = document.getElementById('clicks-left');
