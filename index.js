@@ -4,7 +4,7 @@ class Game {
         this.matrix = this.init()
         this.ships = [4, 3, 3, 2, 2]
         this.placedShips = 0;
-        this.clickCount = 10;
+        this.clickCount = 50;
         this.coordinates = {};
     }
     placeAShip(shipSize, loop) {
@@ -12,13 +12,13 @@ class Game {
         let column = Math.floor(Math.random() * this.size)
         let direction = Math.floor(Math.random() * 2)
         this.coordinates[loop] = []
-    
+
         if (direction === 0) {
             if (column + shipSize < this.size) {
                 if (!this.matrix[row].slice(column, column + shipSize).some(el => el === 'X')) {
                     for (let i = column; i < column + shipSize; i++) {
                         this.matrix[row][i] = 'X'
-                        this.coordinates[loop].push({row: row, column: i})
+                        this.coordinates[loop].push({ row: row, column: i })
                     }
                     this.placedShips++;
                 }
@@ -32,7 +32,7 @@ class Game {
                 if (!newArr.some(el => el === 'X')) {
                     for (let i = row; i < row + shipSize; i++) {
                         this.matrix[i][column] = 'X'
-                        this.coordinates[loop].push({row: i, column: column})
+                        this.coordinates[loop].push({ row: i, column: column })
                     }
                     this.placedShips++;
                 }
@@ -46,6 +46,7 @@ class Game {
                 this.placeAShip(this.ships[i], i)
             }
         }
+        console.log(this.coordinates)
     }
     createTable() {
         let clicksLeftDOM = document.getElementById('clicks-left');
@@ -62,7 +63,7 @@ class Game {
                     j > 0 ? cell.innerHTML = j : cell.innerHTML = ''
                 }
             }
-            let row = table.insertRow(i+1)
+            let row = table.insertRow(i + 1)
             for (let j = 0; j <= this.matrix[i].length; j++) {
                 let cell = row.insertCell(j)
                 if (j === 0) {
@@ -73,9 +74,23 @@ class Game {
                     cell.addEventListener("click", () => {
                         if (this.matrix[i][j] === 'X') {
                             if (cell.className === 'cell') {
-                                moralSupportDOM.innerHTML = 'You hit a boat!';
+                                moralSupportDOM.innerHTML = 'You hit a ship!';
                             }
                             cell.className = 'cell-hit';
+                            Object.keys(this.coordinates).map(key => this.coordinates[key].map((el, index) => {
+                                if (el.row === i && el.column === j) {
+                                    this.coordinates[key].splice(index, 1)
+                                }
+                                if (this.coordinates[key].length === 0) {
+                                    moralSupportDOM.innerHTML = 'You sunk a ship!';
+                                    
+                                    delete this.coordinates[key];
+                                }
+                                if (Object.keys(this.coordinates).length === 0) {
+                                    tableDOM.className = 'disabled';
+                                    moralSupportDOM.innerHTML = 'You win!';
+                                }
+                            }))
                         } else {
                             if (cell.className === 'cell') {
                                 this.clickCount--;
@@ -100,14 +115,14 @@ class Game {
         let letters = []
         let loops = -1;
         while (n >= 0) {
-            if(n < 26) {
+            if (n < 26) {
                 loops == -1 ?
-                letters.push(String.fromCharCode(n + character)) :
-                letters.push(String.fromCharCode(loops + character), String.fromCharCode(n + character))
+                    letters.push(String.fromCharCode(n + character)) :
+                    letters.push(String.fromCharCode(loops + character), String.fromCharCode(n + character))
             }
             n -= 26;
             loops++;
-            
+
         }
         return letters.join('')
     }
