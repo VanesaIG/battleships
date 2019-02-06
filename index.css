@@ -18,27 +18,27 @@ td {
 .cell {
     background-color: #5959b4;
     border-collapse: collapse;
-    border: 1px solid black;
+    border: 0.5px solid black;
 }
 .cell-hit {
     background-color: grey;
     border-collapse: collapse;
-    border: 1px solid black;
+    border: 0.5px solid black;
 }
 .cell-miss {
     background-color: darkblue;
     border-collapse: collapse;
-    border: 1px solid black;
+    border: 0.5px solid black;
 }
 #moral-support {
     position: absolute;
-    left: 550px;
+    left: 600px;
     top: 100px;
     margin: 2%;
 }
 #clicks-left {
     position: absolute;
-    left: 550px;
+    left: 600px;
     top: 50px;
     margin: 2%;
 }
@@ -49,9 +49,23 @@ td {
      border-top: 1px solid white;
      border-left: 1px solid white;
      border-bottom: 1px solid white; 
+     cursor: default;
 }
 .numbers {
     border-top: 1px solid white;
     border-left: 1px solid white;
     border-right: 1px solid white; 
+    cursor: default;
+}
+#new-game {
+    position: absolute;
+    left: 600px;
+    top: 150px;
+    margin: 2%;
+}
+#ships-left{
+    position: absolute;
+    left: 600px;
+    top: 75px;
+    margin: 2%;
 }

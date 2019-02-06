@@ -4,7 +4,7 @@ class Game {
         this.matrix = this.init()
         this.ships = [4, 3, 3, 2, 2]
         this.placedShips = 0;
-        this.clickCount = 50;
+        this.clickCount = 5;
         this.coordinates = {};
     }
     placeAShip(shipSize, loop) {
@@ -53,6 +53,10 @@ class Game {
         let moralSupportDOM = document.getElementById('moral-support');
         let tableDOM = document.getElementById('table');
         let table = document.getElementById("table");
+        let newGameBtn = document.getElementById("new-game");
+        let shipsLeftDom = document.getElementById("ships-left");
+
+        shipsLeftDom.innerHTML = `Ships down: 0/${this.ships.length}`;
         clicksLeftDOM.innerHTML = `You have ${this.clickCount} clicks left!`;
         for (let i = 0; i < this.matrix.length; i++) {
             if (i === 0) {
@@ -63,7 +67,7 @@ class Game {
                     j > 0 ? cell.innerHTML = j : cell.innerHTML = ''
                 }
             }
-            let row = table.insertRow(i + 1)
+            let row = table.insertRow(i + 1);
             for (let j = 0; j <= this.matrix[i].length; j++) {
                 let cell = row.insertCell(j)
                 if (j === 0) {
@@ -83,8 +87,8 @@ class Game {
                                 }
                                 if (this.coordinates[key].length === 0) {
                                     moralSupportDOM.innerHTML = 'You sunk a ship!';
-                                    
                                     delete this.coordinates[key];
+                                    shipsLeftDom.innerHTML = `Ships down: ${this.ships.length - Object.keys(this.coordinates).length}/${this.ships.length}`
                                 }
                                 if (Object.keys(this.coordinates).length === 0) {
                                     tableDOM.className = 'disabled';
@@ -109,6 +113,12 @@ class Game {
                 }
             }
         }
+        newGameBtn.addEventListener("click", () => {
+            tableDOM.innerHTML = ""
+            moralSupportDOM.innerHTML = ""
+            tableDOM.className = '';
+            newGame()
+        });
     }
     letters(n) {
         let character = 65;
@@ -130,7 +140,9 @@ class Game {
         return new Array(this.size).fill('').map(() => [...new Array(this.size).fill('')])
     }
 };
-
-let a = new Game(10);
-a.placeShips();
-a.createTable();
+function newGame() {
+    let a = new Game(10);
+    a.placeShips();
+    a.createTable();
+}
+newGame();
