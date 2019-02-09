@@ -1,18 +1,31 @@
 class Game {
     constructor(size) {
-        this.size = size
-        this.matrix = this.init()
-        this.ships = [4, 3, 3, 2, 2]
-        this.placedShips = 0;
-        this.clickCount = 5;
-        this.coordinates = {};
+        this.size = size;
+        this.tableDOM = document.getElementById("table");
+        this.moralSupportDOM = document.getElementById('moral-support');
     }
-    placeAShip(shipSize, loop) {
-        let row = Math.floor(Math.random() * this.size)
-        let column = Math.floor(Math.random() * this.size)
-        let direction = Math.floor(Math.random() * 2)
-        this.coordinates[loop] = []
 
+    startAgame() {
+        this.matrix = this.emptyMatrix();
+        this.ships = [4, 3, 3, 2, 2];
+        this.placedShips = 0;
+        this.clickCount = 50;
+        this.coordinates = {};
+        this.tableDOM.innerHTML = "";
+        this.moralSupportDOM.innerHTML = "";
+        this.tableDOM.className = "";
+        this.placeShips();
+        this.createTable();
+    }
+    emptyMatrix() {
+        return new Array(this.size).fill('').map(() => [...new Array(this.size).fill('')])
+    }
+
+    placeAShip(shipSize, loop) {
+        let row = Math.floor(Math.random() * this.size);
+        let column = Math.floor(Math.random() * this.size);
+        let direction = Math.floor(Math.random() * 2);
+        this.coordinates[loop] = [];
         if (direction === 0) {
             if (column + shipSize < this.size) {
                 if (!this.matrix[row].slice(column, column + shipSize).some(el => el === 'X')) {
@@ -39,6 +52,7 @@ class Game {
             }
         }
     }
+    
     placeShips() {
         for (let i = 0; i < this.ships.length; i++) {
             let num = this.placedShips;
@@ -46,28 +60,23 @@ class Game {
                 this.placeAShip(this.ships[i], i)
             }
         }
-        console.log(this.coordinates)
     }
+
     createTable() {
         let clicksLeftDOM = document.getElementById('clicks-left');
-        let moralSupportDOM = document.getElementById('moral-support');
-        let tableDOM = document.getElementById('table');
-        let table = document.getElementById("table");
-        let newGameBtn = document.getElementById("new-game");
         let shipsLeftDom = document.getElementById("ships-left");
-
         shipsLeftDom.innerHTML = `Ships down: 0/${this.ships.length}`;
         clicksLeftDOM.innerHTML = `You have ${this.clickCount} clicks left!`;
         for (let i = 0; i < this.matrix.length; i++) {
             if (i === 0) {
-                let row = table.insertRow(i)
+                let row = this.tableDOM.insertRow(i)
                 for (let j = 0; j <= this.matrix[i].length; j++) {
                     let cell = row.insertCell(j)
                     cell.className = 'numbers'
                     j > 0 ? cell.innerHTML = j : cell.innerHTML = ''
                 }
             }
-            let row = table.insertRow(i + 1);
+            let row = this.tableDOM.insertRow(i + 1);
             for (let j = 0; j <= this.matrix[i].length; j++) {
                 let cell = row.insertCell(j)
                 if (j === 0) {
@@ -76,29 +85,29 @@ class Game {
                 } else {
                     cell.className = 'cell'
                     cell.addEventListener("click", () => {
-                        if (this.matrix[i][j] === 'X') {
+                        if (this.matrix[i][j - 1] === 'X') {
                             if (cell.className === 'cell') {
-                                moralSupportDOM.innerHTML = 'You hit a ship!';
+                                this.moralSupportDOM.innerHTML = 'You hit a ship!';
                             }
                             cell.className = 'cell-hit';
                             Object.keys(this.coordinates).map(key => this.coordinates[key].map((el, index) => {
-                                if (el.row === i && el.column === j) {
+                                if (el.row === i && el.column === j - 1) {
                                     this.coordinates[key].splice(index, 1)
                                 }
                                 if (this.coordinates[key].length === 0) {
-                                    moralSupportDOM.innerHTML = 'You sunk a ship!';
+                                    this.moralSupportDOM.innerHTML = 'You sunk a ship!';
                                     delete this.coordinates[key];
                                     shipsLeftDom.innerHTML = `Ships down: ${this.ships.length - Object.keys(this.coordinates).length}/${this.ships.length}`
                                 }
                                 if (Object.keys(this.coordinates).length === 0) {
-                                    tableDOM.className = 'disabled';
-                                    moralSupportDOM.innerHTML = 'You win!';
+                                    this.tableDOM.className = 'disabled';
+                                    this.moralSupportDOM.innerHTML = 'You win!';
                                 }
                             }))
                         } else {
                             if (cell.className === 'cell') {
                                 this.clickCount--;
-                                moralSupportDOM.innerHTML = 'Just water here';
+                                this.moralSupportDOM.innerHTML = 'Just water here';
                             }
                             cell.className = 'cell-miss';
                         }
@@ -106,20 +115,15 @@ class Game {
                             clicksLeftDOM.innerHTML = `You have ${this.clickCount} clicks left!`;
                         } else {
                             clicksLeftDOM.innerHTML = `You have ${this.clickCount} clicks left!`;
-                            tableDOM.className = 'disabled';
-                            moralSupportDOM.innerHTML = 'You lose';
+                            this.tableDOM.className = 'disabled';
+                            this.moralSupportDOM.innerHTML = 'You lose';
                         }
                     });
                 }
             }
         }
-        newGameBtn.addEventListener("click", () => {
-            tableDOM.innerHTML = ""
-            moralSupportDOM.innerHTML = ""
-            tableDOM.className = '';
-            newGame()
-        });
-    }
+    }    
+
     letters(n) {
         let character = 65;
         let letters = []
@@ -136,13 +140,13 @@ class Game {
         }
         return letters.join('')
     }
-    init() {
-        return new Array(this.size).fill('').map(() => [...new Array(this.size).fill('')])
-    }
 };
 function newGame() {
-    let a = new Game(10);
-    a.placeShips();
-    a.createTable();
+    let game = new Game(10);
+    game.startAgame();
+    let newGameBtn = document.getElementById("new-game");
+    newGameBtn.addEventListener("click", () => {
+        game.startAgame();
+    });
 }
 newGame();
