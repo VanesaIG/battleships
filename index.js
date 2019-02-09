@@ -1,20 +1,31 @@
 class Game {
     constructor(size) {
-        this.size = size
-        this.matrix = this.init()
-        this.ships = [4, 3, 3, 2, 2]
-        this.placedShips = 0;
-        this.clickCount = 50;
-        this.coordinates = {};
+        this.size = size;
         this.tableDOM = document.getElementById("table");
         this.moralSupportDOM = document.getElementById('moral-support');
     }
-    placeAShip(shipSize, loop) {
-        let row = Math.floor(Math.random() * this.size)
-        let column = Math.floor(Math.random() * this.size)
-        let direction = Math.floor(Math.random() * 2)
-        this.coordinates[loop] = []
 
+    startAgame() {
+        this.matrix = this.emptyMatrix();
+        this.ships = [4, 3, 3, 2, 2];
+        this.placedShips = 0;
+        this.clickCount = 50;
+        this.coordinates = {};
+        this.tableDOM.innerHTML = "";
+        this.moralSupportDOM.innerHTML = "";
+        this.tableDOM.className = "";
+        this.placeShips();
+        this.createTable();
+    }
+    emptyMatrix() {
+        return new Array(this.size).fill('').map(() => [...new Array(this.size).fill('')])
+    }
+
+    placeAShip(shipSize, loop) {
+        let row = Math.floor(Math.random() * this.size);
+        let column = Math.floor(Math.random() * this.size);
+        let direction = Math.floor(Math.random() * 2);
+        this.coordinates[loop] = [];
         if (direction === 0) {
             if (column + shipSize < this.size) {
                 if (!this.matrix[row].slice(column, column + shipSize).some(el => el === 'X')) {
@@ -41,6 +52,7 @@ class Game {
             }
         }
     }
+    
     placeShips() {
         for (let i = 0; i < this.ships.length; i++) {
             let num = this.placedShips;
@@ -48,12 +60,11 @@ class Game {
                 this.placeAShip(this.ships[i], i)
             }
         }
-        console.log(this.coordinates)
     }
-    createTable() {
-        let clicksLeftDOM = document.getElementById('clicks-left');        
-        let shipsLeftDom = document.getElementById("ships-left");
 
+    createTable() {
+        let clicksLeftDOM = document.getElementById('clicks-left');
+        let shipsLeftDom = document.getElementById("ships-left");
         shipsLeftDom.innerHTML = `Ships down: 0/${this.ships.length}`;
         clicksLeftDOM.innerHTML = `You have ${this.clickCount} clicks left!`;
         for (let i = 0; i < this.matrix.length; i++) {
@@ -111,16 +122,8 @@ class Game {
                 }
             }
         }
-    }
-    newBtn() {
-        let newGameBtn = document.getElementById("new-game");
-        newGameBtn.addEventListener("click", () => {
-            this.tableDOM.innerHTML = ""
-            this.moralSupportDOM.innerHTML = ""
-            this.tableDOM.className = "";
-            newGame()
-        });
-    }
+    }    
+
     letters(n) {
         let character = 65;
         let letters = []
@@ -137,14 +140,13 @@ class Game {
         }
         return letters.join('')
     }
-    init() {
-        return new Array(this.size).fill('').map(() => [...new Array(this.size).fill('')])
-    }
 };
 function newGame() {
     let game = new Game(10);
-    game.placeShips();
-    game.createTable();
-    game.newBtn();
+    game.startAgame();
+    let newGameBtn = document.getElementById("new-game");
+    newGameBtn.addEventListener("click", () => {
+        game.startAgame();
+    });
 }
 newGame();
