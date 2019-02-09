@@ -1,6 +1,4 @@
 #table{
-    position: absolute;
-    left: 10vw;
     cursor: pointer;
     border-collapse: collapse;
     border: 1px solid black;
@@ -9,7 +7,6 @@
 #table, .cell, tr{
     height: 35px;
     text-align: center;
-    table-layout: fixed;
 }
 td {
     min-width: 35px;
@@ -32,13 +29,11 @@ td {
 }
 #moral-support {
     position: absolute;
-    left: 600px;
     top: 100px;
     margin: 2%;
 }
 #clicks-left {
     position: absolute;
-    left: 600px;
     top: 50px;
     margin: 2%;
 }
@@ -59,13 +54,11 @@ td {
 }
 #new-game {
     position: absolute;
-    left: 600px;
     top: 150px;
     margin: 2%;
 }
 #ships-left{
     position: absolute;
-    left: 600px;
     top: 75px;
     margin: 2%;
 }
